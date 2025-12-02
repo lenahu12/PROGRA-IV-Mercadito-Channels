@@ -5,3 +5,4 @@ __pycache__/
 *.log
 staticfiles/
 media/
+venv/
