@@ -1,11 +1,14 @@
 from pathlib import Path
+from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 SECRET_KEY = 'django-insecure-_^#&oc&b1$lgdfphv*0%yh^e&!)k#se(k9-5syo3)-w2fvv-71'
 
-DEBUG = True
+DEBUG = config("DEBUG", default=True, cast=bool)
+RENDER = config("RENDER", default=False, cast=bool)
+SITE_ID = config("SITE_ID", default=1, cast=int)
 
 ALLOWED_HOSTS = ['*']
 
@@ -60,15 +63,19 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis://:password@host:port/0")],
+            "hosts": [config("REDIS_URL")],
         },
     },
 }
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': '3306',
     }
 }
 
